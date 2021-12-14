@@ -7,6 +7,9 @@ pub enum Opcode {
     NOP,
     /// 16-bit opcode filler
     CB,
+    /// Reset the interrupt master enable (IME) flag and prohibit maskable
+    /// interrupts.
+    DI,
     /// Store the contents of last register in the memory location specified by
     /// first register.
     LD(Register, Register),
@@ -28,6 +31,9 @@ pub enum Opcode {
     /// Compare the contents of register A and the contents of the 8-bit immediate
     /// operand d8 by calculating A - d8, and set the Z flag if they are equal.
     CPd8,
+    /// Compare the contents of register and the contents of register A by
+    /// calculating A - register, and set the Z flag if they are equal.
+    CP(Register),
     /// Push the current value of the program counter PC onto the memory stack,
     /// and load into PC the nth byte of page 0 memory addresses, 0xn8.
     RST(u8),
@@ -48,4 +54,11 @@ pub enum Opcode {
     /// flag CY from the contents of register A, and store the results in
     /// register A.
     SBC(Register, Register),
+    /// Copy the complement of the contents of bit n in register to the Z flag
+    /// of the program status word (PSW).
+    BIT(u8, Register),
+    /// If the Z flag is 0, jump s8 steps from the current address stored in the
+    /// program counter (PC). If not, the instruction following the current JP
+    /// instruction is executed (as usual).
+    JRNZ,
 }
